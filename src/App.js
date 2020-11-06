@@ -1,23 +1,27 @@
 import React from 'react'
 import { Client, query as q } from 'faunadb'
+require('dotenv').config()
 
 class App extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      secret: '',
-      collName: '',
-      docID: '',
+      secret: process.env.REACT_APP_FAUNADB_KEY || '' ,
+      collName: process.env.REACT_APP_FAUNADB_COLLECTION || '',
       subscription: null,
       events: []
     }
 
     this.secretChanted = this.secretChanted.bind(this)
     this.collNameChanged = this.collNameChanged.bind(this)
-    this.docIDChanged = this.docIDChanged.bind(this)
     this.connect = this.connect.bind(this)
     this.disconnect = this.disconnect.bind(this)
+  }
+
+  setStateAndLog(logText, state) {
+    console.log(logText, state)
+    return this.setState(state)
   }
 
   render() {
@@ -69,57 +73,58 @@ class App extends React.Component {
                  onChange={this.collNameChanged} />
         </label>
         <br/>
-        <label>
-          Document ID:
-          <input type='text'
-                 value={this.state.docID}
-                 onChange={this.docIDChanged} />
-        </label>
-        <br/>
+
         <input type='submit' value='Connect' />
       </form>
     )
   }
 
   secretChanted(event) {
-    this.setState({ secret: event.target.value })
+    this.setStateAndLog('secret changed', { secret: event.target.value })
   }
 
-  docIDChanged(event) {
-    this.setState({ docID: event.target.value }) }
-
   collNameChanged(event) {
-    this.setState({ collName: event.target.value })
+    this.setStateAndLog('collname changed', { collName: event.target.value })
   }
 
   connect(event) {
+    console.log('connect')
     event.preventDefault()
-    if (!this.state.secret || !this.state.collName || !this.state.docID)
+    if (!this.state.secret || !this.state.collName) {
+      console.error('please make sure a secret and collName is set')
       return
-
-    let ref = q.Ref(
-      q.Collection(this.state.collName),
-      this.state.docID
-    )
+    }
 
     let client = new Client({
       secret: this.state.secret,
-      domain: 'db.fauna-preview.com'
+      domain: 'db.fauna-preview.com',
+      fetch: fetch
     })
 
-    let subscription = client.stream.document(ref)
-      .on('snapshot', data => this.setState({ events: [...this.state.events, data] }))
-      .on('version', data => this.setState({ events: [...this.state.events, data] }))
-      .on('history_rewrite', (data, event) => this.setState({ events: [...this.state.events, event] }))
-      .on('error', data => this.setState({ events: [...this.state.events, data] }))
-      .start()
+    return client.query(
+      q.Paginate(q.Documents(q.Collection(this.state.collName)), { size: 99})
+    ).then((refs => {
+      refs.data.forEach((ref) => {
+        client.stream.document(ref)
+          .on('start', data => this.setStateAndLog('start', { events: [...this.state.events, data] }))
+          .on('snapshot', data => this.setStateAndLog('snapshot', { events: [...this.state.events, data] }))
+          .on('version', data => this.setStateAndLog('version', { events: [...this.state.events, data] }))
+          .on('history_rewrite', (data, event) => this.setStateAndLog('history_rewrite', { events: [...this.state.events, event] }))
+          .on('error', data => this.setStateAndLog('error', { events: [...this.state.events, data] }))
+          .start()
 
-    this.setState({ subscription })
+      })
+    }))
+    .catch((err) => {
+      console.error(err)
+    })
+
+
   }
 
   disconnect() {
     this.state.subscription.close()
-    this.setState({
+    this.setStateAndLog('disconnect', {
       subscription: null,
       events: []
     })
