@@ -1,80 +1,72 @@
-Demo code to get up-and-running with streaming quickly
+## Live streaming of Fauna documents
 
-### `yarn install`
-### `yarn start`
+This project is an example project that uses the **document streaming features** of Fauna. It's a simple React application that shows how to retrieve a page of references from a Fauna collection and open streams on the documents that are currently present on the screen. It will display the incoming versions of the currently loaded documents and update the documents live.
 
-The streaming feature is currently only available to preview users. Please email summer.schrader@fauna.com, or ask in the [Fauna Community](http://community.fauna.com/) if you'd like to volunteer to be a preview user.
+![alt text](https://github.com/fauna-brecht/fauna-streaming-example/blob/main/public/example.png?raw=true)
 
+Many use cases could be built upon document streaming:
 
-----
-----
-----
+* Live dashboard (e.g. elections, dashboard diseases tracking)
+* Shops where the amount of stock or the price of items updates live. 
+* Live-updating multiplayer games that require storage for each move (e.g. games like Pokemon Go)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Setup
 
-## Available Scripts
+#### Setup a collection and Fauna keys
 
-In the project directory, you can run:
+There is an environment variables .example file provided which shows the necessary configuration. Copy the **.env.example** file to a **.env** file and fill in the following variables.
 
-### `yarn start`
+```
+REACT_APP_FAUNA_COLLECTION=some-collection-name-you-pick
+REACT_APP_FAUNA_KEY=your-fauna-key-that-has-access-to-that-collection
+FAUNADB_ADMIN_KEY=admin-key-for-the-scripts
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **REACT_APP_FAUNA_COLLECTION**: the collection that will be streamed to the frontend.  Go to the fauna dashboard (https://dashboard.fauna.com/) and make a new database with one collection which you will use for the application. Fill in the name of the collection here. 
+- **REACT_APP_FAUNA_KEY**: a Fauna key to be used by the frontend to retrieve data and open the streams. To create such a key, go to the fauna dashboard (https://dashboard.fauna.com/) and create a key in the security tab. This key will be exposed in the frontend, although you could use a server key here to quickly test it out, do not use such a key in production. Ideally, make a new role that only has access to the collection you will use. 
+- **FAUNADB_ADMIN_KEY**: this key will be used for two scripts that are provided to generate some data and modify the data to see streaming in action. This data will be created in the collection you provided above. This key will not be exposed to the frontend. You also have the option not to store it in the .env file and fill it in when the script asks for it. 
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+There are two optional variables provided which you can either leave as they are or fill in to connect to your local docker environment. 
 
-### `yarn test`
+```
+REACT_APP_FAUNA_DOMAIN=db.fauna.com
+REACT_APP_FAUNA_SCHEME=https
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### Setup the frontend
 
-### `yarn build`
+Clone the repository and run
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm install
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+to install the libraries.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Start the frontend
 
-### `yarn eject`
+Start the frontend:  
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+npm run start
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Generate some data
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Documents that exist at the moment the application starts become visible in the application. New documents are currently not included since that makes little sense in combination with pagination. For each of the documents that are visible on the page, live updates will arrive. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You can either create some documents yourself, launch the frontend and start editing the documents or you can run the scripts to create and update some shop items.
 
-## Learn More
+The following script will create 50 documents by default
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+pm run populate-shop   
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This script will each time take 20 documents at random and update the stock **available** and **price** of the shopping item.
 
-### Code Splitting
+```
+npm run update-shop-loop
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+You should see the items come in live when the script runs. 
