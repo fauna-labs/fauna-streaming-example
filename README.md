@@ -60,7 +60,7 @@ You can either create some documents yourself, launch the frontend and start edi
 The following script will create 50 documents by default
 
 ```
-pm run populate-shop   
+npm run populate-shop   
 ```
 
 This script will each time take 20 documents at random and update the stock **available** and **price** of the shopping item.
