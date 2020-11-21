@@ -6,8 +6,8 @@ This project is an example project that uses the **document streaming features**
 
 Many use cases could be built upon document streaming:
 
-* Live dashboard (e.g. elections, dashboard diseases tracking)
-* Shops where the amount of stock or the price of items updates live. 
+* Live dashboard (e.g. elections, disease tracking, stock trading)
+* Web pages that update their data live as changes come in (e.g. the amount of stock on a shop item that a user is watching)
 * Live-updating multiplayer games that require storage for each move (e.g. games like Pokemon Go)
 
 ### Setup
