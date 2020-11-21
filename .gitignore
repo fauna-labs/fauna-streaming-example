@@ -13,4 +13,5 @@ yarn-error.log*
 /.changelog
 .npm/
 yarn.lock
-.env
+.env**
+!.env.example

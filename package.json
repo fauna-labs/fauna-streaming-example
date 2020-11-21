@@ -6,16 +6,21 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "faunadb": "^4.0.0-preview.1",
+    "faker": "^5.1.0",
+    "faunadb": "^4.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "react-toastify": "^6.1.0",
+    "readline-promise": "^1.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "populate-shop": "node -r esm ./scripts/populate-shop.js local",
+    "update-shop-loop": "node -r esm ./scripts/update-shop-loop.js local"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -31,5 +36,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "esm": "^3.2.25"
   }
 }

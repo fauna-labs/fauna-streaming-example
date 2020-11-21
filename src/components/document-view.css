@@ -1,0 +1,119 @@
+/* Document lines structure*/
+.documents-view {
+    display: flex;
+    flex-direction: column;
+}
+
+.document-line {
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.05);
+    margin: 5px;
+}
+
+.document-icon-name {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.document-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 20px;
+    width: 100px;
+}
+
+.document-icon {
+    margin-top: 15px;
+}
+
+.document-versions {
+    display: flex;
+    flex-direction: row;
+}
+
+.current-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+.document-version {
+    display: flex;
+}
+
+/* Horizontal line */
+.wrap {
+    text-align: center;
+    position: relative;
+}
+.lines {
+    justify-content: space-between;
+    position: relative;
+    display: flex;
+    width: 50px;
+    cursor: pointer;
+}
+
+
+.line {
+    position: absolute;
+    border-top: 2px solid #42964168;
+    width: 50px;
+    height: 20px;
+    top: calc(50% - 1px);
+}
+
+.diffdata {
+    position: absolute;
+    padding: 10px;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 10px;
+    color: white;
+    width: 250%;
+    left: -75%;
+    top:55%;
+    height: 50%;
+    font-size: 10px;
+}
+
+.dot {
+    /* red #F55341 */
+    /* purple #F55341 */
+    position: absolute;
+    top: calc(50% - 4px);
+    left: calc(50% - 4px);
+    height: 8px;
+    width: 8px;
+    background-color:#439641;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
+.lines:hover .dot {
+    background-color:#3F00A5;
+    top: calc(50% - 6px);
+    left: calc(50% - 6px);
+    height: 12px;
+    width: 12px;
+}
+
+.diff {
+    position: absolute;
+
+    font-size: 10px;
+    top: 10%;
+    left: 5%;
+}
+
+.currentjson {
+    display: flex;
+    font-size: 10px;
+    width: 180px;
+}
