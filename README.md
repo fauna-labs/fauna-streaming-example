@@ -69,4 +69,5 @@ This script will each time take 20 documents at random and update the stock **av
 npm run update-shop-loop
 ```
 
-You should see the items come in live when the script runs. 
+You should see the items come in live when the script runs. The script will run about 20 times, feel free to run it again if you
+want to see more update and/or adapt the code. Keep in mind that you might quickly go through your free-tier if you keep it running for a long time.

@@ -34,8 +34,10 @@ const updateRandomShopItems = async (client) => {
         )
     )
 
-
+    const MAXLOOPS = 20
+    let loops = 0
     const loop = async () => {
+
         try {
             const randomObjs = getRandom(references.data, 20)
             const queries = []
@@ -62,7 +64,11 @@ const updateRandomShopItems = async (client) => {
         catch (err) {
             console.error(err)
         }
-        setTimeout(loop, 10)
+        if (loops < MAXLOOPS) {
+            loops++
+            console.log(loops)
+            setTimeout(loop, 10)
+        }
     }
     loop()
 }

@@ -14,7 +14,7 @@ export class StreamsManager {
         // added for convenience in case you are working with a docker image or connecting to another
         // environment (e.g. preview)
         this.client = new Client({
-            secret: process.env.REACT_APP_FAUNA_SECRET,
+            secret: process.env.REACT_APP_FAUNA_KEY,
             domain: process.env.REACT_APP_FAUNA_DOMAIN || 'db.fauna.com',
             scheme: process.env.REACT_APP_FAUNA_SCHEME || 'https'
         })
